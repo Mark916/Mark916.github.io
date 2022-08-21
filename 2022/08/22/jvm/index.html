@@ -20,29 +20,35 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="[toc] JVM内存模型以及分区，需要详细到每个区放什么? 对象创建方法，对象的内存分配，对象的访问定位?GC 的两种判定方法?SafePoint 是什么GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。 并行收集器 CMS收集器  G1收集器   Minor GC 与 F">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Mark&#96;s Blog">
-<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:url" content="http://example.com/2022/08/22/jvm/index.html">
 <meta property="og:site_name" content="Mark&#96;s Blog">
+<meta property="og:description" content="[toc] JVM内存模型以及分区，需要详细到每个区放什么? 对象创建方法，对象的内存分配，对象的访问定位?GC 的两种判定方法?SafePoint 是什么GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。 并行收集器 CMS收集器  G1收集器   Minor GC 与 F">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:/Users/wongzb/AppData/Roaming/Typora/typora-user-images/image-20220427170044661.png">
+<meta property="article:published_time" content="2022-08-21T16:34:16.602Z">
+<meta property="article:modified_time" content="2022-04-27T09:01:02.200Z">
 <meta property="article:author" content="Mark">
 <meta property="article:tag" content="Java,Netty,Spring,SppringBoot,SpringCloud,Dubbo,xxl-job,Redis,Mysql,Docker,JVM,SpringCloudAlibaba,中间件">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/wongzb/AppData/Roaming/Typora/typora-user-images/image-20220427170044661.png">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/08/22/jvm/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Mark`s Blog</title>
+  <title> | Mark`s Blog</title>
   
 
 
@@ -159,9 +165,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -177,10 +184,9 @@
       <meta itemprop="name" content="Mark`s Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/08/22/jvm/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -210,7 +216,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>[toc]</p>
+        <p>[toc]</p>
 <h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="内存模型以及分区，需要详细到每个区放什么"><a href="#内存模型以及分区，需要详细到每个区放什么" class="headerlink" title="内存模型以及分区，需要详细到每个区放什么?"></a>内存模型以及分区，需要详细到每个区放什么?</h2><p><img src="C:\Users\wongzb\AppData\Roaming\Typora\typora-user-images\image-20220427170044661.png" alt="image-20220427170044661"></p>
 <h2 id="对象创建方法，对象的内存分配，对象的访问定位"><a href="#对象创建方法，对象的内存分配，对象的访问定位" class="headerlink" title="对象创建方法，对象的内存分配，对象的访问定位?"></a>对象创建方法，对象的内存分配，对象的访问定位?</h2><h2 id="GC-的两种判定方法"><a href="#GC-的两种判定方法" class="headerlink" title="GC 的两种判定方法?"></a>GC 的两种判定方法?</h2><h2 id="SafePoint-是什么"><a href="#SafePoint-是什么" class="headerlink" title="SafePoint 是什么"></a>SafePoint 是什么</h2><h2 id="GC-的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？"><a href="#GC-的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？" class="headerlink" title="GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？"></a>GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？</h2><h2 id="GC-收集器有哪些？CMS-收集器与-G1-收集器的特点。"><a href="#GC-收集器有哪些？CMS-收集器与-G1-收集器的特点。" class="headerlink" title="GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。"></a>GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。</h2><ul>
 <li>并行收集器</li>
@@ -240,156 +246,30 @@
 <li>自定义类加载器</li>
 </ul>
 <h2 id="简述-java-内存分配与回收策率以及-Minor-GC-和-Major-GC"><a href="#简述-java-内存分配与回收策率以及-Minor-GC-和-Major-GC" class="headerlink" title="简述 java 内存分配与回收策率以及 Minor GC 和 Major GC"></a>简述 java 内存分配与回收策率以及 Minor GC 和 Major GC</h2>
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/22/ce-shi-wen-zhang/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mark">
-      <meta itemprop="description" content="">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mark`s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/22/ce-shi-wen-zhang/" class="post-title-link" itemprop="url">测试文章</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-22 00:05:23 / 修改时间：00:10:48" itemprop="dateCreated datePublished" datetime="2022-08-22T00:05:23+08:00">2022-08-22</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/22/ce-shi-wen-zhang/" rel="prev" title="测试文章">
+      <i class="fa fa-chevron-left"></i> 测试文章
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/21/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mark">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mark`s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/21/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-21 23:57:03" itemprop="dateCreated datePublished" datetime="2022-08-21T23:57:03+08:00">2022-08-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：1985-10-26 16:15:00" itemprop="dateModified" datetime="1985-10-26T16:15:00+08:00">1985-10-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span>
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
@@ -442,6 +322,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM"><span class="nav-number">1.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%88%86%E5%8C%BA%EF%BC%8C%E9%9C%80%E8%A6%81%E8%AF%A6%E7%BB%86%E5%88%B0%E6%AF%8F%E4%B8%AA%E5%8C%BA%E6%94%BE%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">内存模型以及分区，需要详细到每个区放什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%EF%BC%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%EF%BC%8C%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.2.</span> <span class="nav-text">对象创建方法，对象的内存分配，对象的访问定位?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%88%A4%E5%AE%9A%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">GC 的两种判定方法?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SafePoint-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.4.</span> <span class="nav-text">SafePoint 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-%E7%9A%84%E4%B8%89%E7%A7%8D%E6%94%B6%E9%9B%86%E6%96%B9%E6%B3%95%EF%BC%9A%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E3%80%81%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E3%80%81%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E7%89%B9%E7%82%B9%EF%BC%8C%E5%88%86%E5%88%AB%E7%94%A8%E5%9C%A8%E4%BB%80%E4%B9%88%E5%9C%B0%E6%96%B9%EF%BC%8C%E5%A6%82%E6%9E%9C%E8%AE%A9%E4%BD%A0%E4%BC%98%E5%8C%96%E6%94%B6%E9%9B%86%E6%96%B9%E6%B3%95%EF%BC%8C%E6%9C%89%E4%BB%80%E4%B9%88%E6%80%9D%E8%B7%AF%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-%E6%94%B6%E9%9B%86%E5%99%A8%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9FCMS-%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E-G1-%E6%94%B6%E9%9B%86%E5%99%A8%E7%9A%84%E7%89%B9%E7%82%B9%E3%80%82"><span class="nav-number">1.6.</span> <span class="nav-text">GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minor-GC-%E4%B8%8E-Full-GC-%E5%88%86%E5%88%AB%E5%9C%A8%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%8F%91%E7%94%9F%EF%BC%9F"><span class="nav-number">1.7.</span> <span class="nav-text">Minor GC 与 Full GC 分别在什么时候发生？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E5%87%A0%E4%B8%AA%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.8.</span> <span class="nav-text">类加载的几个过程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E5%86%85%E5%AD%98%E5%88%86%E5%93%AA%E5%87%A0%E4%B8%AA%E5%8C%BA%EF%BC%8C%E6%AF%8F%E4%B8%AA%E5%8C%BA%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.9.</span> <span class="nav-text">JVM 内存分哪几个区，每个区的作用是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E5%92%8C%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E5%AD%98%E6%B4%BB-%E6%88%96%E8%80%85-GC-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%A4%E5%AE%9A%E6%96%B9%E6%B3%95"><span class="nav-number">1.10.</span> <span class="nav-text">如和判断一个对象是否存活?(或者 GC 对象的判定方法)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0-java-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">1.11.</span> <span class="nav-text">简述 java 垃圾回收机制?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-%E4%B8%AD%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.12.</span> <span class="nav-text">java 中垃圾收集的方法有哪些?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.13.</span> <span class="nav-text">java 内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B%E6%9C%BA%E5%88%B6%EF%BC%9F"><span class="nav-number">1.14.</span> <span class="nav-text">类加载器双亲委派模型机制？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%EF%BC%8C%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.15.</span> <span class="nav-text">什么是类加载器，类加载器有哪些?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0-java-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%8E%87%E4%BB%A5%E5%8F%8A-Minor-GC-%E5%92%8C-Major-GC"><span class="nav-number">1.16.</span> <span class="nav-text">简述 java 内存分配与回收策率以及 Minor GC 和 Major GC</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
