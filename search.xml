@@ -4,32 +4,6 @@
   
     
     <entry>
-      <title>page</title>
-      <link href="/2022/08/22/page/"/>
-      <url>/2022/08/22/page/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/2022/08/22/jvm/"/>
-      <url>/2022/08/22/jvm/</url>
-      
-        <content type="html"><![CDATA[<p>[toc]</p><h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="内存模型以及分区，需要详细到每个区放什么"><a href="#内存模型以及分区，需要详细到每个区放什么" class="headerlink" title="内存模型以及分区，需要详细到每个区放什么?"></a>内存模型以及分区，需要详细到每个区放什么?</h2><p><img src="C:\Users\wongzb\AppData\Roaming\Typora\typora-user-images\image-20220427170044661.png" alt="image-20220427170044661"></p><h2 id="对象创建方法，对象的内存分配，对象的访问定位"><a href="#对象创建方法，对象的内存分配，对象的访问定位" class="headerlink" title="对象创建方法，对象的内存分配，对象的访问定位?"></a>对象创建方法，对象的内存分配，对象的访问定位?</h2><h2 id="GC-的两种判定方法"><a href="#GC-的两种判定方法" class="headerlink" title="GC 的两种判定方法?"></a>GC 的两种判定方法?</h2><h2 id="SafePoint-是什么"><a href="#SafePoint-是什么" class="headerlink" title="SafePoint 是什么"></a>SafePoint 是什么</h2><h2 id="GC-的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？"><a href="#GC-的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？" class="headerlink" title="GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？"></a>GC 的三种收集方法：标记清除、标记整理、复制算法的原理与特点，分别用在什么地方，如果让你优化收集方法，有什么思路？</h2><h2 id="GC-收集器有哪些？CMS-收集器与-G1-收集器的特点。"><a href="#GC-收集器有哪些？CMS-收集器与-G1-收集器的特点。" class="headerlink" title="GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。"></a>GC 收集器有哪些？CMS 收集器与 G1 收集器的特点。</h2><ul><li>并行收集器</li><li>CMS收集器 </li><li>G1收集器 </li></ul><h2 id="Minor-GC-与-Full-GC-分别在什么时候发生？"><a href="#Minor-GC-与-Full-GC-分别在什么时候发生？" class="headerlink" title="Minor GC 与 Full GC 分别在什么时候发生？"></a>Minor GC 与 Full GC 分别在什么时候发生？</h2><h2 id="类加载的几个过程："><a href="#类加载的几个过程：" class="headerlink" title="类加载的几个过程："></a>类加载的几个过程：</h2><h2 id="JVM-内存分哪几个区，每个区的作用是什么"><a href="#JVM-内存分哪几个区，每个区的作用是什么" class="headerlink" title="JVM 内存分哪几个区，每个区的作用是什么?"></a>JVM 内存分哪几个区，每个区的作用是什么?</h2><h2 id="如和判断一个对象是否存活-或者-GC-对象的判定方法"><a href="#如和判断一个对象是否存活-或者-GC-对象的判定方法" class="headerlink" title="如和判断一个对象是否存活?(或者 GC 对象的判定方法)"></a><strong>如和判断一个对象是否存活?(或者 GC 对象的判定方法)</strong></h2><h2 id="简述-java-垃圾回收机制"><a href="#简述-java-垃圾回收机制" class="headerlink" title="简述 java 垃圾回收机制?"></a><strong>简述 java 垃圾回收机制?</strong></h2><h2 id="java-中垃圾收集的方法有哪些"><a href="#java-中垃圾收集的方法有哪些" class="headerlink" title="java 中垃圾收集的方法有哪些?"></a>java 中垃圾收集的方法有哪些?</h2><ul><li>标记-清除</li><li>标记-整理</li><li>复制</li><li>分代整理</li></ul><h2 id="java-内存模型"><a href="#java-内存模型" class="headerlink" title="java 内存模型"></a>java 内存模型</h2><ul><li>方法区</li><li>堆</li><li>栈</li><li>程序计数器</li><li>本地方法栈</li></ul><h2 id="类加载器双亲委派模型机制？"><a href="#类加载器双亲委派模型机制？" class="headerlink" title="类加载器双亲委派模型机制？"></a>类加载器双亲委派模型机制？</h2><ul><li>按照类加载器向上执行，先由父加载器加载》》顶级父加载器没加载到再交给子类加载器</li></ul><h2 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些?"></a>什么是类加载器，类加载器有哪些?</h2><ul><li>Bootstrap类加载器</li><li>Extension 类加载器</li><li>Application 类加载器</li><li>自定义类加载器</li></ul><h2 id="简述-java-内存分配与回收策率以及-Minor-GC-和-Major-GC"><a href="#简述-java-内存分配与回收策率以及-Minor-GC-和-Major-GC" class="headerlink" title="简述 java 内存分配与回收策率以及 Minor GC 和 Major GC"></a>简述 java 内存分配与回收策率以及 Minor GC 和 Major GC</h2>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>测试文章</title>
       <link href="/2022/08/22/ce-shi-wen-zhang/"/>
       <url>/2022/08/22/ce-shi-wen-zhang/</url>
